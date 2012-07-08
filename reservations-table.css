@@ -1,0 +1,127 @@
+/* @override http://mr.si/rezervacije/wp-content/plugins/reservations/reservations-table.css?ver=3.4.1 */
+
+table {
+	border-collapse: collapse;
+	border-spacing: 0;
+	margin: 0;
+	padding: 0;
+	border: 0;
+	font-size: 100%;
+	vertical-align: baseline;
+	font-style: inherit;
+}
+
+#reservations {
+	width: 646px;
+}
+
+#reservations td, #reservations th {
+	font: 15px "Lucida Grande", Lucida, Verdana, sans-serif;
+	color: #444;
+	text-align: center;
+	border: 1px solid #ddd;
+	padding: 0;
+}
+
+td.reservation_hour {
+	width: 60px;
+}
+
+td.reservation_court {
+	width: 20px!important;
+}
+
+td.reservation_court.reserved {
+	background-color: #fbb;
+	cursor: default;
+	border: none!important;
+}
+
+td.can_reserve, td.can_cancel {
+	cursor: pointer!important;
+}
+
+td.reservation_court.reserved.first {
+	border-top: 2px solid #f00!important;
+}
+
+#reservations td:nth-child(4n+1) {
+	border-right: 1px solid black!important;
+}
+
+#reservations td:first-child {
+	border-left: 1px solid black!important;
+}
+
+#reservations tr:last-child td, #reservations tr:nth-child(2) td {
+	border-bottom: 1px solid black!important;
+}
+
+#reservations th {
+	border-right: 1px solid black!important;
+	border-top: 1px solid black!important;
+	border-left: 1px solid black!important;
+}
+
+div.reservation_tooltip {
+	position: absolute;
+	display: none;
+	background: #fff;
+	border: 1px solid #333;
+	padding: 8px;
+	margin: 0;
+}
+
+div.reservation_tooltip p {
+	padding: 3px;
+	margin: 0;
+}
+
+#reservation_form, #cancel_form {
+	position: absolute;
+	background-color: #fff;
+	border: 2px solid #333;
+	z-index: 99;
+	left: 50%;
+	top: 50%;
+	display: none;
+}
+
+#reservation_form {
+	width: 230px;
+	margin-left: -115px;
+}
+
+#cancel_form {
+	width: 300px;
+	margin-left: -150px;
+}
+
+#reservation_form p input, #cancel_form p input {
+	width: 200px;
+}
+
+#reservation_form p, #cancel_form p {
+	text-align: center;
+	margin: 0 10px;
+	padding: 2px 0;
+}
+
+#cancel_reservation, #cancel_cancellation {
+	color: #888;
+	font: 12px/150% "Lucida Grande", Lucida, Verdana, sans-serif;
+	cursor: pointer;
+}
+
+#reservation_notice {
+	position: absolute;
+	width: 400px;
+	background-color: #fff;
+	border: 2px solid #333;
+	z-index: 50;
+	left: 50%;
+	top: 50%;
+	padding: 5px;
+	margin: 0 0 0 -200px;
+	text-align: center;
+}
