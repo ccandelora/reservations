@@ -26,6 +26,7 @@ function reservations_table_handler() {
 	reservationTooltips($reservations);
 	reservationForm();
 	cancelForm();
+	loginForm();
 }
 
 function getReservations() {
@@ -141,7 +142,11 @@ function printTable($table) {
 		$html .= '<tr><td class="reservation_hour">'.getHumanReadableHour($hour).'</td>';
 		$date = mktime(0, 0, 0, date('m'), date('d'), date('Y'));
 		for ($i = 0; $i < 7; $i++) {
-			$canReserve = (is_user_logged_in() && userHasNoFutureReservations()) ? ' can_reserve' : '';
+			if(is_user_logged_in()) {
+				$canReserve = (userHasNoFutureReservations()) ? ' can_reserve' : '';
+			} else {
+				$canReserve = ' guest_reserve';
+			}
 
 			if ($i === 0) {
 				$canReserve = ($hour > date('Gi')) ? $canReserve : '';

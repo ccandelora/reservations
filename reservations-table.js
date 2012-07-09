@@ -54,6 +54,10 @@ jQuery(document).ready(function($) {
 		$('#cancel_form_info').html($('#reservation'+$this.data('reservation-id')).find('p').html());
 	});
 	
+	$('td.guest_reserve').click(function() {
+		$('#loginform').show();
+	});
+	
 	$('#cancel_reservation').click(function() {
 		$('#reservation_form').fadeOut();
 	});

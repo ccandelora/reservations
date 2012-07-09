@@ -1,5 +1,18 @@
 <?
 
+function loginForm() {
+	$args = array(
+		'echo' => false,
+		'label_username' => 'Uporabniško ime',
+		'label_password' => 'Geslo',
+		'label_remember' => 'Zapomni se me',
+		'label_log_in' => 'Prijavi se',
+		'value_remember' => true
+	);
+	$form = wp_login_form($args);
+	echo substr_replace($form, '<p class="login_form_notice">Za rezerviranje morate biti prijavljeni!</p>', strpos($form, '<p'), 0);
+}
+
 function cancelForm() {
 	$form = '<form id=cancel_form name="cancel_reservation" method="post">';
 	$form .= '<p id=cancel_form_info></p>';

@@ -37,7 +37,7 @@ td.reservation_court.reserved {
 	border: none!important;
 }
 
-td.can_reserve, td.can_cancel {
+td.can_reserve, td.guest_reserve, td.can_cancel {
 	cursor: pointer!important;
 }
 
@@ -77,7 +77,7 @@ div.reservation_tooltip p {
 	margin: 0;
 }
 
-#reservation_form, #cancel_form {
+#reservation_form, #cancel_form, #loginform {
 	position: absolute;
 	background-color: #fff;
 	border: 2px solid #333;
@@ -97,14 +97,23 @@ div.reservation_tooltip p {
 	margin-left: -150px;
 }
 
+#loginform {
+	width: 300px;
+	margin-left: -150px;
+}
+
 #reservation_form p input, #cancel_form p input {
 	width: 200px;
 }
 
-#reservation_form p, #cancel_form p {
+#reservation_form p, #cancel_form p, #loginform p {
 	text-align: center;
 	margin: 0 10px;
 	padding: 2px 0;
+}
+
+#loginform .login_form_notice {
+	color: #f00;
 }
 
 #cancel_reservation, #cancel_cancellation {
