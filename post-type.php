@@ -88,10 +88,13 @@ if (is_admin()){
 		'use_with_theme' => false			//change path if used with theme set to true, false for a plugin or anything else for a custom path(default false).
 	);
 	
+	require_once('helpers.php');
+		
 	$my_meta =	new AT_Meta_Box($config);
-	$my_meta->addDate($prefix.'date_field_id',array('name'=> 'Date of reservation ', 'format' =>'yy-mm-dd'));
-	$my_meta->addTime($prefix.'time_from_field_id',array('name'=> 'From '));
-	$my_meta->addTime($prefix.'time_until_field_id',array('name'=> 'Until '));
+	$my_meta->addDate($prefix.'date_field_id', array('name'=> 'Date of reservation ', 'format' =>'yy-mm-dd'));
+	$my_meta->addTime($prefix.'time_from_field_id', array('name'=> 'From'));
+	$my_meta->addTime($prefix.'time_until_field_id', array('name'=> 'Until'));
+	$my_meta->addSelect($prefix.'opponent_field_id', getOpponents(), array('name'=> 'Nasprotnik'));
 	$my_meta->Finish();
 }
 
