@@ -86,6 +86,8 @@ function processReservation() {
 		add_post_meta($post_id, 'reservations_time_until_field_id', getHumanReadableHour($until), true);
 		add_post_meta($post_id, 'reservations_opponent_field_id', $_POST['opponent'], true);
 		wp_set_post_terms($post_id, reset(get_terms('play_courts', array('hide_empty' => false, 'slug' => $_POST['play_courts'])))->name, 'play_courts');
+		
+		sendSMSes($post_id);
 		return true;
 	}
 	
@@ -138,5 +140,20 @@ function invalidReservationValues() {
 	}
 	
 	return true;
+}
+
+function sendSMSes($postID) {
+	global $current_user;
+	$current_user = wp_get_current_user();
+	$number = get_the_author_meta('yim', $current_user->ID);
+	$postMeta = get_post_meta($postID);
+	$postTerms = wp_get_object_terms($postID, 'play_courts');
+	$date = $postMeta['reservations_date_field_id'][0];
+	$date = (int)substr($date, 8, 2).'.'.(int)substr($date, 5, 2).'.';
+		
+	$text =  sprintf('Rezervirali ste %s za %s med %s in %s.', $postTerms[0]->name, $date, $postMeta['reservations_time_from_field_id'][0], $postMeta['reservations_time_until_field_id'][0]);
+	return sendSMS($number, $text);
+	
+	//TODO opponents!!!
 }
 ?>

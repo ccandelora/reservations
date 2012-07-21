@@ -1,4 +1,7 @@
 <?
+require_once('NexmoMessage.php');
+require('definitions.php');
+
 function getOpponents() {
 	$usersDropdownArgs = array(
 		'role' => 'subscriber',
@@ -35,5 +38,21 @@ function getProgrammeReadableHour($hour) {
 	}
 	
 	return $hour;
+}
+
+function numberIsValidFormatForSMS($number) {
+	if (strlen($number) === 12 && substr($number, 0, 4) === '+386') {
+		return true;
+	}
+	return false;
+}
+
+function sendSMS($number, $text) {
+	$sms = new NexmoMessage(NEXMO_API_KEY, NEXMO_API_SECRET);
+	if (numberIsValidFormatForSMS($number)) {
+		return $sms->sendText($number, 'TK Radomlje', $text);
+	}
+	
+	return false;
 }
 ?>
