@@ -152,8 +152,10 @@ function sendSMSes($postID) {
 	$date = (int)substr($date, 8, 2).'.'.(int)substr($date, 5, 2).'.';
 		
 	$text =  sprintf('Rezervirali ste %s za %s med %s in %s.', $postTerms[0]->name, $date, $postMeta['reservations_time_from_field_id'][0], $postMeta['reservations_time_until_field_id'][0]);
-	return sendSMS($number, $text);
-	
-	//TODO opponents!!!
+	sendSMS($number, $text);
+
+	$opponentText = sprintf('%s je za vas rezerviral %s za %s med %s in %s.', $current_user->display_name, $postTerms[0]->name, $date, $postMeta['reservations_time_from_field_id'][0], $postMeta['reservations_time_until_field_id'][0]);	
+	$opponent = get_userdata($postMeta['reservations_opponent_field_id'][0]);
+	sendSMS($opponent->yim, $opponentText);	
 }
 ?>
