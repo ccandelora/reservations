@@ -136,13 +136,19 @@ function printTable($table) {
 	global $current_user;
 	$current_user = wp_get_current_user();
 	
-	$html = '<table id="reservations">';
+	if (is_user_logged_in()) {
+		$html = '<p>Prijavljen kot '.$current_user->display_name.' <a href="'.wp_logout_url(get_permalink()).'">Odjavi se.</a></p>';
+	} else {
+		$html = '<p class="guest_reserve">Prijavi se.</p>';
+	}
+	
+	$html .= '<table id="reservations">';
 	$html .= tableHeader();
 	for ($hour = 700; $hour < 2300; $hour=$hour+50) {
 		$html .= '<tr><td class="reservation_hour">'.getHumanReadableHour($hour).'</td>';
 		$date = mktime(0, 0, 0, date('m'), date('d'), date('Y'));
 		for ($i = 0; $i < 7; $i++) {
-			if(is_user_logged_in()) {
+			if (is_user_logged_in()) {
 				$canReserve = (userHasNoFutureReservations()) ? ' can_reserve' : '';
 			} else {
 				$canReserve = ' guest_reserve';

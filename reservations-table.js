@@ -54,7 +54,7 @@ jQuery(document).ready(function($) {
 		$('#cancel_form_info').html($('#reservation'+$this.data('reservation-id')).find('p').html());
 	});
 	
-	$('td.guest_reserve').click(function() {
+	$('.guest_reserve').click(function() {
 		$('#loginform').show();
 	});
 	
