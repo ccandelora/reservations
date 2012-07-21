@@ -121,7 +121,7 @@ function reservationExists() {
 		$from = getProgrammeReadableHour(get_post_meta(get_the_ID(), 'reservations_time_from_field_id', true));
 		$until = getProgrammeReadableHour(get_post_meta(get_the_ID(), 'reservations_time_until_field_id', true));
 		
-		if(($fromReq >= $from && $fromReq < $until) || ($untilReq > $from && $untilReq <= $until)) {
+		if(($from >= $fromReq && $from < $untilReq) || ($until > $fromReq && $until <= $untilReq)) {
 			$return = true;
 		}
 	endwhile;
