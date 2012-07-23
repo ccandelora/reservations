@@ -44,6 +44,14 @@ jQuery(document).ready(function($) {
 		$('#text_reservation_from').text(getHumanReadableYear($this.data('reserve-date'))+' od: '+getHumanReadableHour($this.data('reserve-hour')));
 	});
 	
+	$('#reservation_form select[name=opponent]').change(function() {
+		$('#reservation_form select[name=opponent2]').show();
+	});
+	
+	$('#reservation_form select[name=opponent2]').change(function() {
+		$('#reservation_form select[name=opponent3]').show();
+	});	
+	
 	$('td.can_cancel').click(function() {
 		$('#reservation_form').hide();
 

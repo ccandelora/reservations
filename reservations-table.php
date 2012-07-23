@@ -50,6 +50,12 @@ function getReservations() {
 		$from = getProgrammeReadableHour(get_post_meta(get_the_ID(), 'reservations_time_from_field_id', true));
 		$until = getProgrammeReadableHour(get_post_meta(get_the_ID(), 'reservations_time_until_field_id', true));
 		
+		$opponents = array(
+			get_post_meta(get_the_ID(), 'reservations_opponent_field_id', true),
+			get_post_meta(get_the_ID(), 'reservations_opponent_field_id2', true),
+			get_post_meta(get_the_ID(), 'reservations_opponent_field_id3', true)
+		);
+		
 		$reservation = array(
 			'id' => get_the_ID(),
 			'title' => get_the_title(),
@@ -57,7 +63,7 @@ function getReservations() {
 			'reservatorID' => get_the_author_meta('ID'),
 			'courts' => wp_get_post_terms(get_the_ID(), 'play_courts'),
 			'date' => get_post_meta(get_the_ID(), 'reservations_date_field_id', true),
-			'opponent' => get_post_meta(get_the_ID(), 'reservations_opponent_field_id', true),
+			'opponents' => $opponents,
 			'from' => $from,
 			'until' => $until
 		);
@@ -137,7 +143,7 @@ function printTable($table) {
 	$current_user = wp_get_current_user();
 	
 	if (is_user_logged_in()) {
-		$html = '<p>Prijavljen kot '.$current_user->display_name.' <a href="'.wp_logout_url(get_permalink()).'">Odjavi se.</a></p>';
+		$html = '<p>Prijavljen kot '.$current_user->display_name.'. <a href="'.wp_logout_url(get_permalink()).'">Odjavi se.</a></p>';
 	} else {
 		$html = '<p class="guest_reserve">Prijavi se.</p>';
 	}
@@ -201,8 +207,15 @@ function reservationTooltips($reservations) {
 		$html .= '<div id=reservation'.$reservation['id'].' class=reservation_tooltip>';
 		$html .= '<p>Rezervirano: '.$reservation['reservator'].' | '.getHumanReadableHour($reservation['from']).' - '.getHumanReadableHour($reservation['until']).'</p>';
 		
-		if ($reservation['opponent'] > 0) {
-			$html .= '<p>Nasprotnik: '.get_userdata($reservation['opponent'])->display_name.'</p>';
+		$opponents = array();
+		foreach ($reservation['opponents'] as $opponent) {
+			if ($opponent > 0) {
+				$opponents[] = get_userdata($opponent)->display_name;
+			}
+		}
+
+		if (count($opponents) > 0) {
+			$html .= '<p>Nasprotnik: '.implode(', ', $opponents).'</p>';
 		}
 		
 		if ($reservation['title']) {

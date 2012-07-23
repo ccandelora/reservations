@@ -95,6 +95,8 @@ if (is_admin()){
 	$my_meta->addTime($prefix.'time_from_field_id', array('name'=> 'From'));
 	$my_meta->addTime($prefix.'time_until_field_id', array('name'=> 'Until'));
 	$my_meta->addSelect($prefix.'opponent_field_id', getOpponents(), array('name'=> 'Nasprotnik'));
+	$my_meta->addSelect($prefix.'opponent_field_id2', getOpponents(), array('name'=> 'Nasprotnik 2'));
+	$my_meta->addSelect($prefix.'opponent_field_id3', getOpponents(), array('name'=> 'Nasprotnik 3'));
 	$my_meta->Finish();
 }
 

@@ -36,6 +36,21 @@ function processCancellation() {
 	return false;
 }
 
+function getOpponentForm($name, $hide = false) {
+	if ($hide) {
+		$hide = ' style="display: none; "';
+	}
+
+	$opponents = getOpponents();
+	$opponentForm = '<p><select name="'.$name.'"'.$hide.'>';
+	foreach ($opponents as $key => $opponent) {
+		$opponentForm .= '<option value='.$key.'>'.$opponent.'</option>';
+	}
+	$opponentForm .= '</select></p>';
+	
+	return $opponentForm;
+}
+
 function reservationForm() {
 	$courts = get_terms('play_courts', array('hide_empty' => false));
 	$courtsForm = '<select name="play_courts">';
@@ -44,18 +59,13 @@ function reservationForm() {
 	}
 	$courtsForm .= '</select></p>';
 	
-	$opponents = getOpponents();
-	$opponentForm = '<p><select name="opponent">';
-	foreach ($opponents as $key => $opponent) {
-		$opponentForm .= '<option value='.$key.'>'.$opponent.'</option>';
-	}
-	$opponentForm .= '</select></p>';
-	
 	$form = '<form id=reservation_form name="reservation" method="post">';
 	$form .= '<p id="text_reservation_from"></p>';
 	$form .= '<p><select name="length"><option value="50">30 min</option><option value="100" selected="selected">1 ura</option><option value="150">1 ura 30 min</option><option value="200">2 uri</option></select>';
 	$form .= $courtsForm;
-	$form .= $opponentForm;
+	$form .= getOpponentForm('opponent');
+	$form .= getOpponentForm('opponent2', true);
+	$form .= getOpponentForm('opponent3', true);
 	$form .= '<p><input type="text" name="title" placeholder="Opomba"/></p>';
 	$form .= '<input type="hidden" name="from" />';
 	$form .= '<input type="hidden" name="date" />';
@@ -85,6 +95,8 @@ function processReservation() {
 		add_post_meta($post_id, 'reservations_time_from_field_id', getHumanReadableHour($_POST['from']), true);
 		add_post_meta($post_id, 'reservations_time_until_field_id', getHumanReadableHour($until), true);
 		add_post_meta($post_id, 'reservations_opponent_field_id', $_POST['opponent'], true);
+		add_post_meta($post_id, 'reservations_opponent_field_id2', $_POST['opponent2'], true);
+		add_post_meta($post_id, 'reservations_opponent_field_id3', $_POST['opponent3'], true);
 		wp_set_post_terms($post_id, reset(get_terms('play_courts', array('hide_empty' => false, 'slug' => $_POST['play_courts'])))->name, 'play_courts');
 		
 		sendSMSes($post_id);
@@ -135,7 +147,7 @@ function reservationExists() {
 function invalidReservationValues() {
 	$until = $_POST['from'] + $_POST['length'];
 	$court_count = count(get_terms('play_courts', array('hide_empty' => false, 'slug' => $_POST['play_courts'])));
-	if ($_POST['from'] >= 700 && $until <= 2300 && $court_count === 1 && is_numeric($_POST['opponent']) && is_user_logged_in()) {
+	if ($_POST['from'] >= 700 && $until <= 2300 && $court_count === 1 && is_numeric($_POST['opponent']) && is_numeric($_POST['opponent2']) && is_numeric($_POST['opponent3']) && is_user_logged_in()) {
 		return false;
 	}
 	
@@ -155,7 +167,14 @@ function sendSMSes($postID) {
 	sendSMS($number, $text);
 
 	$opponentText = sprintf('%s je za vas rezerviral %s za %s med %s in %s.', $current_user->display_name, $postTerms[0]->name, $date, $postMeta['reservations_time_from_field_id'][0], $postMeta['reservations_time_until_field_id'][0]);	
+	
 	$opponent = get_userdata($postMeta['reservations_opponent_field_id'][0]);
-	sendSMS($opponent->yim, $opponentText);	
+	sendSMS($opponent->yim, $opponentText);
+	
+	$opponent = get_userdata($postMeta['reservations_opponent_field_id2'][0]);
+	sendSMS($opponent->yim, $opponentText);
+	
+	$opponent = get_userdata($postMeta['reservations_opponent_field_id3'][0]);
+	sendSMS($opponent->yim, $opponentText);
 }
 ?>
