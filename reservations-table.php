@@ -143,22 +143,20 @@ function printTable($table) {
 	$current_user = wp_get_current_user();
 	
 	if (is_user_logged_in()) {
-		$html = '<p>Prijavljen kot '.$current_user->display_name.'. <a href="'.wp_logout_url(get_permalink()).'">Odjavi se.</a></p>';
+		$html = '<p>Prijavljen kot '.$current_user->display_name.'. <a href="'.wp_logout_url(get_permalink()).'">Odjavi se</a>.</p>';
 	} else {
-		$html = '<p class="guest_reserve">Prijavi se.</p>';
+		$html = '<p><a class="guest_reserve">Prijavi se</a>. <a href="'.site_url('wp-login.php?action=register', 'login').'">Registriraj se</a>.</p>';
 	}
+	
+	$canReserveTable = getReservationAbilityTable();
 	
 	$html .= '<table id="reservations">';
 	$html .= tableHeader();
 	for ($hour = 700; $hour < 2300; $hour=$hour+50) {
 		$html .= '<tr><td class="reservation_hour">'.getHumanReadableHour($hour).'</td>';
 		$date = mktime(0, 0, 0, date('m'), date('d'), date('Y'));
-		for ($i = 0; $i < 7; $i++) {
-			if (is_user_logged_in()) {
-				$canReserve = (userHasNoFutureReservations()) ? ' can_reserve' : '';
-			} else {
-				$canReserve = ' guest_reserve';
-			}
+		for ($i = 0; $i < 7; $i++) {			
+			$canReserve = $canReserveTable[$i];
 
 			if ($i === 0) {
 				$canReserve = ($hour > date('Gi')) ? $canReserve : '';
@@ -228,7 +226,22 @@ function reservationTooltips($reservations) {
 	echo $html;
 }
 
-function userHasNoFutureReservations() {
+function getReservationAbilityTable() {
+	$date = mktime(0, 0, 0, date('m'), date('d'), date('Y'));
+	for ($i = 0; $i < 7; $i++) {
+		if (is_user_logged_in()) {
+			$canReserve[$i] = (userHasNoReservationsForTheDay($date)) ? ' can_reserve' : '';
+		} else {
+			$canReserve[$i] = ' guest_reserve';
+		}
+		
+		$date += 86400;
+	}
+	
+	return $canReserve;
+}
+
+function userHasNoReservationsForTheDay($day) {
 	if(current_user_can('edit_others_posts')) {
 		return true;
 	}
@@ -242,8 +255,8 @@ function userHasNoFutureReservations() {
 		'meta_query' => array(
 			array(
 				'key' => 'reservations_date_field_id',
-				'value' => date('Y-m-d'),
-				'compare' => '>='
+				'value' => date('Y-m-d', $day),
+				'compare' => '='
 			)
 		)
 	);
