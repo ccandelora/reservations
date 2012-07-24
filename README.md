@@ -21,9 +21,9 @@ I needed to back up my code and wanted to have version control. You are more tha
 Is it all your work?
 -------
 Mostly, but I also use some 3rd party solutions:
-* [My-Meta-Box](https://github.com/bainternet/My-Meta-Box)
-* [Nexmo-PHP-lib](https://github.com/prawnsalad/Nexmo-PHP-lib)
-* [The Noun Project](http://thenounproject.com/)
+* [My-Meta-Box](https://github.com/bainternet/My-Meta-Box) for custom WordPress meta boxes
+* [Nexmo-PHP-lib](https://github.com/prawnsalad/Nexmo-PHP-lib) for sending SMSes
+* [The Noun Project](http://thenounproject.com/) for dashboard icon
 
 License
 -------
