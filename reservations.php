@@ -4,7 +4,7 @@ Plugin Name: Reservations
 Plugin URI: http://mr.si/reservations
 Description: This is a plugin for tennis reservations.
 Author: Miha Rekar
-Version: 0.1 alpha
+Version: 0.1
 Author URI: http://mr.si/
 License:
 
