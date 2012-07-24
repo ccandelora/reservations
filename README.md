@@ -18,6 +18,13 @@ Well, why is this here than?
 
 I needed to back up my code and wanted to have version control. You are more than welcome to use my code for your project and even more - if you need something similar but don't know how to make it, please [contact me](http://mr.si/) and we will find a solution good for both parties.
 
+Is it all your work?
+-------
+Mostly, but I also use some 3rd party solutions:
+* [My-Meta-Box](https://github.com/bainternet/My-Meta-Box)
+* [Nexmo-PHP-lib](https://github.com/prawnsalad/Nexmo-PHP-lib)
+* [The Noun Project](http://thenounproject.com/)
+
 License
 -------
 
