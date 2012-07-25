@@ -30,6 +30,7 @@ function processCancellation() {
 		global $current_user;
 		$current_user = wp_get_current_user();
 		if($current_user->ID == $reservation->post_author) {
+			sendCancellationSMSes($reservation->ID);
 			return wp_delete_post($reservation->ID);
 		}
 	}
@@ -99,7 +100,7 @@ function processReservation() {
 		add_post_meta($post_id, 'reservations_opponent_field_id3', $_POST['opponent3'], true);
 		wp_set_post_terms($post_id, reset(get_terms('play_courts', array('hide_empty' => false, 'slug' => $_POST['play_courts'])))->name, 'play_courts');
 		
-		sendSMSes($post_id);
+		sendReservationSMSes($post_id);
 		return true;
 	}
 	
@@ -154,27 +155,50 @@ function invalidReservationValues() {
 	return true;
 }
 
-function sendSMSes($postID) {
-	global $current_user;
-	$current_user = wp_get_current_user();
-	$number = get_the_author_meta('yim', $current_user->ID);
+function sendReservationSMSes($postID) {
+	$reservation = get_post($postID);
+	$reservator = get_user_by('id', $reservation->post_author);
+	$reservatorNumber = $reservator->yim;
 	$postMeta = get_post_meta($postID);
 	$postTerms = wp_get_object_terms($postID, 'play_courts');
 	$date = $postMeta['reservations_date_field_id'][0];
 	$date = (int)substr($date, 8, 2).'.'.(int)substr($date, 5, 2).'.';
 		
 	$text =  sprintf('Rezervirali ste %s za %s med %s in %s.', $postTerms[0]->name, $date, $postMeta['reservations_time_from_field_id'][0], $postMeta['reservations_time_until_field_id'][0]);
-	sendSMS($number, $text);
+	sendSMS($reservatorNumber, $text);
 
-	$opponentText = sprintf('%s je za vas rezerviral %s za %s med %s in %s.', $current_user->display_name, $postTerms[0]->name, $date, $postMeta['reservations_time_from_field_id'][0], $postMeta['reservations_time_until_field_id'][0]);	
+	$opponentText = sprintf('%s je za vas rezerviral %s za %s med %s in %s.', $reservator->display_name, $postTerms[0]->name, $date, $postMeta['reservations_time_from_field_id'][0], $postMeta['reservations_time_until_field_id'][0]);	
 	
-	$opponent = get_userdata($postMeta['reservations_opponent_field_id'][0]);
-	sendSMS($opponent->yim, $opponentText);
-	
-	$opponent = get_userdata($postMeta['reservations_opponent_field_id2'][0]);
-	sendSMS($opponent->yim, $opponentText);
-	
-	$opponent = get_userdata($postMeta['reservations_opponent_field_id3'][0]);
-	sendSMS($opponent->yim, $opponentText);
+	sendSMSesToOpponents($postMeta, $opponentText);
 }
+
+function sendCancellationSMSes($postID) {
+	$reservation = get_post($postID);
+	$reservator = get_user_by('id', $reservation->post_author);
+	$reservatorNumber = $reservator->yim;
+	$postMeta = get_post_meta($postID);
+	$postTerms = wp_get_object_terms($postID, 'play_courts');
+	$date = $postMeta['reservations_date_field_id'][0];
+	$date = (int)substr($date, 8, 2).'.'.(int)substr($date, 5, 2).'.';
+		
+	$text =  sprintf('Preklicali ste rezervacijo: %s za %s med %s in %s.', $postTerms[0]->name, $date, $postMeta['reservations_time_from_field_id'][0], $postMeta['reservations_time_until_field_id'][0]);
+	sendSMS($reservatorNumber, $text);
+
+	$opponentText = sprintf('%s je za vas preklical rezervacijo: %s za %s med %s in %s.', $reservator->display_name, $postTerms[0]->name, $date, $postMeta['reservations_time_from_field_id'][0], $postMeta['reservations_time_until_field_id'][0]);
+	
+	sendSMSesToOpponents($postMeta, $opponentText);
+}
+
+function sendSMSesToOpponents($postMeta, $text) {
+	$opponents = array(
+		get_userdata($postMeta['reservations_opponent_field_id'][0]),
+		get_userdata($postMeta['reservations_opponent_field_id2'][0]),
+		get_userdata($postMeta['reservations_opponent_field_id3'][0])
+	);
+	
+	foreach ($opponents as $opponent) {
+		sendSMS($opponent->yim, $text);
+	}
+}
+
 ?>

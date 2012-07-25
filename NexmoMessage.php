@@ -1,20 +1,20 @@
 <?php
 
 /**
- * Class NexmoMessage handles the methods and properties of sending an SMS message.
- * 
- * Usage: $var = new NexoMessage ( $account_key, $account_password );
- * Methods:
- *     sendText ( $to, $from, $message, $unicode = null )
- *     sendBinary ( $to, $from, $body, $udh )
- *     pushWap ( $to, $from, $title, $url, $validity = 172800000 )
- *     displayOverview( $nexmo_response=null )
- *     
- *     inboundText ( $data=null )
- *     reply ( $text )
- *     
- *
- */
+* Class NexmoMessage handles the methods and properties of sending an SMS message.
+*
+* Usage: $var = new NexoMessage ( $account_key, $account_password );
+* Methods:
+*     sendText ( $to, $from, $message, $unicode = null )
+*     sendBinary ( $to, $from, $body, $udh )
+*     pushWap ( $to, $from, $title, $url, $validity = 172800000 )
+*     displayOverview( $nexmo_response=null )
+*
+*     inboundText ( $data=null )
+*     reply ( $text )
+*
+*
+*/
 
 class NexmoMessage {
 
@@ -23,25 +23,25 @@ class NexmoMessage {
 	private $nx_secret = '';
 
 	/**
-	 * @var string Nexmo server URI
-	 *
-	 * We're sticking with the JSON interface here since json
-	 * parsing is built into PHP and requires no extensions.
-	 * This will also keep any debugging to a minimum due to
-	 * not worrying about which parser is being used.
-	 */
+	* @var string Nexmo server URI
+	*
+	* We're sticking with the JSON interface here since json
+	* parsing is built into PHP and requires no extensions.
+	* This will also keep any debugging to a minimum due to
+	* not worrying about which parser is being used.
+	*/
 	var $nx_uri = 'https://rest.nexmo.com/sms/json';
 
 	
 	/**
-	 * @var array The most recent parsed Nexmo response.
-	 */
+	* @var array The most recent parsed Nexmo response.
+	*/
 	private $nexmo_response = '';
 	
 
 	/**
-	 * @var bool If recieved an inbound message
-	 */
+	* @var bool If recieved an inbound message
+	*/
 	var $inbound_message = false;
 
 
@@ -64,12 +64,12 @@ class NexmoMessage {
 
 
 	/**
-	 * Prepare new text message.
-	 *
-	 * If $unicode is not provided we will try to detect the
-	 * message type. Otherwise set to TRUE if you require
-	 * unicode characters.
-	 */
+	* Prepare new text message.
+	*
+	* If $unicode is not provided we will try to detect the
+	* message type. Otherwise set to TRUE if you require
+	* unicode characters.
+	*/
 	function sendText ( $to, $from, $message, $unicode=null ) {
 	
 		// Making sure strings are UTF-8 encoded
@@ -109,8 +109,8 @@ class NexmoMessage {
 	
 	
 	/**
-	 * Prepare new WAP message.
-	 */
+	* Prepare new WAP message.
+	*/
 	function sendBinary ( $to, $from, $body, $udh ) {
 	
 		//Binary messages must be hex encoded
@@ -134,8 +134,8 @@ class NexmoMessage {
 	
 	
 	/**
-	 * Prepare new binary message.
-	 */
+	* Prepare new binary message.
+	*/
 	function pushWap ( $to, $from, $title, $url, $validity = 172800000 ) {
 
 		// Making sure $title and $url are UTF-8 encoded
@@ -162,8 +162,8 @@ class NexmoMessage {
 	
 	
 	/**
-	 * Prepare and send a new message.
-	 */
+	* Prepare and send a new message.
+	*/
 	private function sendRequest ( $data ) {
 		// Build the post data
 		$data = array_merge($data, array('username' => $this->nx_key, 'password' => $this->nx_secret));
@@ -208,13 +208,13 @@ class NexmoMessage {
 		$from_nexmo = str_replace('-', '', $from_nexmo);
 		
 		return $this->nexmoParse( $from_nexmo );
-	 
+	
 	}
 	
 	
 	/**
-	 * Parse server response.
-	 */
+	* Parse server response.
+	*/
 	private function nexmoParse ( $from_nexmo ) {
 		
 		$response_obj = json_decode( $from_nexmo );
@@ -244,12 +244,12 @@ class NexmoMessage {
 
 
 	/**
-	 * Validate an originator string
-	 *
-	 * If the originator ('from' field) is invalid, some networks may reject the network
-	 * whilst stinging you with the financial cost! While this cannot correct them, it
-	 * will try its best to correctly format them.
-	 */
+	* Validate an originator string
+	*
+	* If the originator ('from' field) is invalid, some networks may reject the network
+	* whilst stinging you with the financial cost! While this cannot correct them, it
+	* will try its best to correctly format them.
+	*/
 	private function validateOriginator($inp){
 		// Remove any invalid characters
 		$ret = preg_replace('/[^a-zA-Z0-9]/', '', (string)$inp);
@@ -354,16 +354,16 @@ class NexmoMessage {
 
 
 	/**
-	 * Inbound text methods
-	 */
+	* Inbound text methods
+	*/
 	
 
 	/**
-	 * Check for any inbound messages, using $_GET by default.
-	 *
-	 * This will set the current message to the inbound
-	 * message allowing for a future reply() call.
-	 */
+	* Check for any inbound messages, using $_GET by default.
+	*
+	* This will set the current message to the inbound
+	* message allowing for a future reply() call.
+	*/
 	public function inboundText( $data=null ){
 		if(!$data) $data = $_GET;
 
@@ -384,8 +384,8 @@ class NexmoMessage {
 
 
 	/**
-	 * Reply the current message if one is set.
-	 */
+	* Reply the current message if one is set.
+	*/
 	public function reply ($message) {
 		// Make sure we actually have a text to reply to
 		if (!$this->inbound_message) {

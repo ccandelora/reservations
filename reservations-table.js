@@ -5,7 +5,7 @@ jQuery(document).ready(function($) {
 		$tooltip = $('#reservation'+$(this).data('reservation-id'));
 		$tooltip.show();
 		$this.mousemove(function(e){
-			   	$tooltip.css({
+			$tooltip.css({
 					top: (e.pageY + 15) + "px",
 					left: (e.pageX + 15) + "px"
 				});
@@ -50,7 +50,7 @@ jQuery(document).ready(function($) {
 	
 	$('#reservation_form select[name=opponent2]').change(function() {
 		$('#reservation_form select[name=opponent3]').show();
-	});	
+	});
 	
 	$('td.can_cancel').click(function() {
 		$('#reservation_form').hide();

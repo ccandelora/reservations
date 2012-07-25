@@ -4,7 +4,7 @@ require_once(dirname(__FILE__) . '/meta-box-class/my-meta-box-class.php');
 
 add_action( 'init', 'register_cpt_reservation' );
 function register_cpt_reservation() {
-	$labels = array( 
+	$labels = array(
 		'name' => _x( 'Reservations', 'reservation' ),
 		'singular_name' => _x( 'Reservation', 'reservation' ),
 		'add_new' => _x( 'Add New', 'reservation' ),
@@ -18,7 +18,7 @@ function register_cpt_reservation() {
 		'parent_item_colon' => _x( 'Parent Reservation:', 'reservation' ),
 		'menu_name' => _x( 'Reservations', 'reservation' ),
 	);
-	$args = array( 
+	$args = array(
 		'labels' => $labels,
 		'hierarchical' => false,
 		'description' => 'Rezervacije',
@@ -43,7 +43,7 @@ function register_cpt_reservation() {
 
 add_action( 'init', 'register_taxonomy_play_courts' );
 function register_taxonomy_play_courts() {
-	$labels = array( 
+	$labels = array(
 		'name' => _x( 'Play Courts', 'play_courts' ),
 		'singular_name' => _x( 'Play Court', 'play_courts' ),
 		'search_items' => _x( 'Search Play Courts', 'play_courts' ),
@@ -60,7 +60,7 @@ function register_taxonomy_play_courts() {
 		'choose_from_most_used' => _x( 'Choose from most used Play Courts', 'play_courts' ),
 		'menu_name' => _x( 'Play Courts', 'play_courts' ),
 	);
-	$args = array( 
+	$args = array(
 		'labels' => $labels,
 		'public' => true,
 		'show_in_nav_menus' => false,
