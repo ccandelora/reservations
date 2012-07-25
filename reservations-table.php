@@ -216,7 +216,7 @@ function reservationTooltips($reservations) {
 			$html .= '<p>Nasprotnik: '.implode(', ', $opponents).'</p>';
 		}
 		
-		if ($reservation['title']) {
+		if ($reservation['title'] && $reservation['title'] != 'Untitled') {
 			$html .= '<p>Opomba: '.$reservation['title'].'</p>';
 		}
 		
