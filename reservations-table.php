@@ -161,7 +161,11 @@ function printTable($table) {
 			if ($i === 0) {
 				$canReserve = ($hour > date('Gi')) ? $canReserve : '';
 			} elseif ($i === 1) {
-				$canReserve = (date('Gi') > 1900) ? $canReserve : '';
+				if ($_COOKIE['priority_reservations']) {
+					$canReserve = (date('Gi') > 1900) ? $canReserve : '';
+				} else {
+					$canReserve = (date('Gi') > 1930) ? $canReserve : '';
+				}
 			} else {
 				$canReserve = '';
 			}
